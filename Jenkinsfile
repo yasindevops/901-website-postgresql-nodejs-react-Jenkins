@@ -1,19 +1,20 @@
-pipeline{
+pipeline {
     agent any
     tools {
            dockerTool 'docker'            
     }
 
-    stages { 
+    stages {
         stage('Deploy the App') {
             steps {
                 echo 'Deploy the App'
                 sh 'ls -l'
                 script {
                     dockerComposeBuild(
-                        composeFile: 'docker-compose.yaml')
-                }        
-             }
+                        composeFile: 'docker-compose.yaml'
+                    )
+                }
+            }
         }
 
     
@@ -25,8 +26,9 @@ pipeline{
                 }
                 script {
                     dockerComposeDown(
-                        composeFile: 'docker-compose.yaml')
-                } 
+                        composeFile: 'docker-compose.yaml'
+                    )
+                }
             }
         }
     }
