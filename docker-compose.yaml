@@ -2,7 +2,7 @@ version: '3'
 services:
   db:
     build:
-      context: /database/ 
+      context: ./database/ 
       dockerfile: Dockerfile
     # image: cloudnice/dockercompose-pern-database
     restart: always
@@ -18,7 +18,7 @@ services:
   server:
     # image: cloudnice/dockercompose-pern-server
     build:
-      context: /server/
+      context: ./server/
       dockerfile: Dockerfile
     depends_on:
       - db
@@ -31,7 +31,7 @@ services:
   client:
     # image: cloudnice/dockercompose-pern-client 
     build:
-      context: /client/
+      context: ./client/
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
