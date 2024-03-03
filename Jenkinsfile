@@ -53,7 +53,7 @@ pipeline {
             steps {
                 script {
                     echo 'Waiting for the DB'
-                    sh 'sleep  120s' // wait for  2 minutes
+                    sh 'sleep  60s' // wait for  1 minute
                 }
             }
         }
@@ -69,7 +69,7 @@ pipeline {
             steps {
                 script {
                     echo 'Waiting for the Nodejs'
-                    sh 'sleep  60s' // wait for  1 minute
+                    sh 'sleep  30s' // wait for  30 seconds
                 }
             }
         }
