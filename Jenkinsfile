@@ -23,6 +23,7 @@ pipeline {
         stage('Push Image to Dockerhub Repo') {
             steps {
                 echo 'Pushing App Image to DockerHub Repo'
+                sh 'docker login -u yasindevops06 -p dckr_pat_sEDanizgv-G0cAE8u0beqGJQRM0'
                 sh 'docker push "$DOCKERHUB_USER/$APP_REPO_NAME:postgre"'
                 sh 'docker push "$DOCKERHUB_USER/$APP_REPO_NAME:nodejs"'
                 sh 'docker push "$DOCKERHUB_USER/$APP_REPO_NAME:react"'
