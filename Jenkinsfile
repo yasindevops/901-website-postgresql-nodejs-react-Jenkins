@@ -56,7 +56,7 @@ pipeline {
             steps {
                 script {
                     echo 'Waiting for the DB'
-                    sh 'sleep  60s' // wait for  1 minute
+                    sh './database/dockerize -wait tcp://db:5432 -timeout 60s'
                 }
             }
         }
@@ -72,7 +72,7 @@ pipeline {
             steps {
                 script {
                     echo 'Waiting for the Nodejs'
-                    sh 'sleep  30s' // wait for  30 seconds
+                    sh './dockerize -wait tcp://server:5000 -timeout 60s'
                 }
             }
         }
