@@ -84,7 +84,7 @@ pipeline {
             }
         }
 
-         stage('Destroy the infrastructure') {
+         stage('Approve for destroy the infrastructure') {
             steps {
                 timeout(time:5, unit:'DAYS') {
                     input message:'Approve terminate'
@@ -92,8 +92,7 @@ pipeline {
                 echo 'All the resources will be cleaned up in the next step...'
                 script {
                 sh 'docker container ls && docker images && docker network ls && docker volume ls'
-                sh 'docker rm -f $(docker container ls -aq)'
-                } 
+               } 
             }
         }
     }
