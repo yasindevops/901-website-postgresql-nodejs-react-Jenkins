@@ -47,7 +47,7 @@ pipeline {
             steps {
                 echo 'Deploying the DB'
                 withCredentials([string(credentialsId: 'project901-postgre-password', variable: 'POSTGRE_PASS')]) {
-                    sh 'docker run --name db -p 5432:5432 -v $DB_VOLUME:/var/lib/postgresql/data --network $NETWORK -e POSTGRES_PASSWORD=$POSTGRE_PASS --restart always -d $DOCKERHUB_USER/$APP_REPO_NAME:postgre' 
+                    sh 'docker run --name db -p 5432:5432 -v $DB_VOLUME:/var/lib/postgresql/data --network $NETWORK -e POSTGRES_PASSWORD=$POSTGRE_PASS --restart always -d -t $DOCKERHUB_USER/$APP_REPO_NAME:postgre' 
             }
           }  
         }
