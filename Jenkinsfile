@@ -23,7 +23,7 @@ pipeline {
             steps {
                 echo 'Pushing App Image to DockerHub Repo'
                 withCredentials([string(credentialsId: 'my-dockerhub-token', variable: 'DOCKERHUB_TOKEN')]) {
-                sh 'docker login -u yasindevops06 -p ${DOCKERHUB_TOKEN}'
+                sh 'docker login -u yasindevops06 -p $DOCKERHUB_TOKEN'
                 sh 'docker push "$DOCKERHUB_USER/$APP_REPO_NAME:postgre"'
                 sh 'docker push "$DOCKERHUB_USER/$APP_REPO_NAME:nodejs"'
                 sh 'docker push "$DOCKERHUB_USER/$APP_REPO_NAME:react"'
@@ -97,12 +97,12 @@ pipeline {
         }
     }
 
-    post {
-        success {
-        script {
-        slackSend channel: '#class-chat', color: '#439FE0', message: ':fire: :fire:', teamDomain: 'devops15tr', tokenCredentialId: 'jenkins-slack'
-            }
-    }
-    }  
+    // post {
+    //     success {
+    //     script {
+    //     slackSend channel: '#class-chat', color: '#439FE0', message: ':fire: :fire:', teamDomain: 'devops15tr', tokenCredentialId: 'jenkins-slack'
+    //         }
+    // }
+    // }  
 
 }
