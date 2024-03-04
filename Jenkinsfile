@@ -89,13 +89,36 @@ pipeline {
                 timeout(time:5, unit:'DAYS') {
                     input message:'Approve terminate'
                 }
-                sh 'docker rm -f $(docker ps -aq)' 
-                sh 'docker network rm $NETWORK'
-                sh 'docker volume rm $DB_VOLUME'
-                sh 'docker rmi -f $DOCKERHUB_USER/$APP_REPO_NAME:postgre $DOCKERHUB_USER/$APP_REPO_NAME:nodejs $DOCKERHUB_USER/$APP_REPO_NAME:react ' 
+                echo 'All the resources will be cleaned up in the next step...'
+                script {
+                sh 'docker container ls && docker images && docker network ls && docker volume ls'
+                sh 'docker rm -f $(docker container ls -aq)'
+                } 
             }
         }
     }
+    
+    post {
+        always {
+            echo 'Cleaning up'
+            script {
+                sh 'docker rmi -f $(docker images -q)'
+                sh 'docker network rm $NETWORK'
+                sh 'docker volume rm $DB_VOLUME'
+            }
+        }
+
+        success {
+            echo 'Pipeline executed successfully'
+            sh 'echo  "SUCCESS" '
+        }
+
+        failure {
+            echo 'Pipeline failed. Cleaning up containers, images, network, and volume.'
+             sh 'echo  "FAILURE" '
+        }
+    }
+
 
     // post {
     //     success {
