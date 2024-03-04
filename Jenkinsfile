@@ -56,7 +56,7 @@ pipeline {
             steps {
                 script {
                     echo 'Waiting for the DB'
-                    sh 'docker exec -it yasindevops06/todo-app:postgre sh && ./dockerize -wait tcp://db:5432 -timeout 100s'
+                    sh 'docker exec -it db sh && ./dockerize -wait tcp://db:5432 -timeout 100s'
                 }
             }
         }
@@ -72,7 +72,7 @@ pipeline {
             steps {
                 script {
                     echo 'Waiting for the Nodejs'
-                    sh 'docker exec -it yasindevops06/todo-app:nodejs sh && ./dockerize -wait tcp://server:5000 -timeout 60s'
+                    sh 'docker exec -it server sh && ./dockerize -wait tcp://server:5000 -timeout 60s'
                 }
             }
         }
