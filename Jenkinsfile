@@ -80,7 +80,7 @@ pipeline {
         stage('Deploy the client') {
             steps {
                 echo 'Deploying the client'
-                sh 'docker run --name client -p 3000:3000 --network $NETWORK  --restart always -d $DOCKERHUB_USER/$APP_REPO_NAME:react' 
+                sh 'docke run --name client -p 3000:3000 --network $NETWORK  --restart always -d $DOCKERHUB_USER/$APP_REPO_NAME:react' 
             }
         }
 
@@ -97,7 +97,7 @@ pipeline {
             }
         }
     }
-    
+
     post {
         always {
             echo 'Cleaning up'
