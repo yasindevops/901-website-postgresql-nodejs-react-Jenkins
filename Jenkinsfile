@@ -5,29 +5,30 @@ pipeline {
         DOCKERHUB_USER="yasindevops06"
         APP_REPO_NAME = "todo-app"   
         DB_VOLUME="myvolume"    
-        NETWORK="mynetwork" 
-        POSTGRES_PASSWORD= "Pp123456789"     
+        NETWORK="mynetwork"             
     }
 
     stages {
         stage('Build App Docker Image') {
             steps {
-                echo 'Building App Image'
+                echo 'Building App Image'                
                 sh 'docker build --force-rm -t "$DOCKERHUB_USER/$APP_REPO_NAME:postgre" -f ./database/Dockerfile .'
                 sh 'docker build --force-rm -t "$DOCKERHUB_USER/$APP_REPO_NAME:nodejs" -f ./server/Dockerfile .'
                 sh 'docker build --force-rm -t "$DOCKERHUB_USER/$APP_REPO_NAME:react" -f ./client/Dockerfile .'
                 sh 'docker image ls'
             }
-        }
+       }
 
         stage('Push Image to Dockerhub Repo') {
             steps {
                 echo 'Pushing App Image to DockerHub Repo'
-                sh 'docker login -u yasindevops06 -p dckr_pat_sEDanizgv-G0cAE8u0beqGJQRM0'
+                withCredentials([string(credentialsId: 'my-dockerhub-token', variable: 'DOCKERHUB_TOKEN')]) {
+                sh 'docker login -u yasindevops06 -p ${DOCKERHUB_TOKEN}'
                 sh 'docker push "$DOCKERHUB_USER/$APP_REPO_NAME:postgre"'
                 sh 'docker push "$DOCKERHUB_USER/$APP_REPO_NAME:nodejs"'
                 sh 'docker push "$DOCKERHUB_USER/$APP_REPO_NAME:react"'
             }
+          }
         }
         stage('Create Volume') {
             steps {
@@ -45,8 +46,10 @@ pipeline {
         stage('Deploy the DB') {
             steps {
                 echo 'Deploying the DB'
-                sh 'docker run --name db -p 5432:5432 -v $DB_VOLUME:/var/lib/postgresql/data --network $NETWORK -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD --restart always -d $DOCKERHUB_USER/$APP_REPO_NAME:postgre' 
+                withCredentials([string(credentialsId: 'project901-postgre-password', variable: 'POSTGRE_PASS')]) {
+                    sh 'docker run --name db -p 5432:5432 -v $DB_VOLUME:/var/lib/postgresql/data --network $NETWORK -e POSTGRES_PASSWORD=${POSTGRES_PASS} --restart always -d $DOCKERHUB_USER/$APP_REPO_NAME:postgre' 
             }
+          }  
         }
 
         stage('wait the DB-container') {
@@ -77,7 +80,7 @@ pipeline {
         stage('Deploy the client') {
             steps {
                 echo 'Deploying the client'
-                sh 'docker run --name client -p 3000:30000 --network $NETWORK  --restart always -d $DOCKERHUB_USER/$APP_REPO_NAME:react' 
+                sh 'docker run --name client -p 3000:3000 --network $NETWORK  --restart always -d $DOCKERHUB_USER/$APP_REPO_NAME:react' 
             }
         }
 
