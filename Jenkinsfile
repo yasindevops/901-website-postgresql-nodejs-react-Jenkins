@@ -23,7 +23,7 @@ pipeline {
             steps {
                 echo 'Pushing App Image to DockerHub Repo'
                 withCredentials([string(credentialsId: 'my-dockerhub-token', variable: 'DOCKERHUB_TOKEN')]) {
-                sh 'docker login -u yasindevops06 -p $DOCKERHUB_TOKEN'
+                sh 'docker login -u $DOCKERHUB_USER -p $DOCKERHUB_TOKEN'
                 sh 'docker push "$DOCKERHUB_USER/$APP_REPO_NAME:postgre"'
                 sh 'docker push "$DOCKERHUB_USER/$APP_REPO_NAME:nodejs"'
                 sh 'docker push "$DOCKERHUB_USER/$APP_REPO_NAME:react"'
@@ -56,7 +56,7 @@ pipeline {
             steps {
                 script {
                     echo 'Waiting for the DB'
-                    sh 'sleep  60s' // wait for  1 minute
+                    sh 'sleep  30s' // wait for  45 seconds
                 }
             }
         }
@@ -72,7 +72,7 @@ pipeline {
             steps {
                 script {
                     echo 'Waiting for the Nodejs'
-                    sh 'sleep  30s' // wait for  30 seconds
+                    sh 'sleep  15s' // wait for  15 seconds
                 }
             }
         }
